@@ -1,9 +1,9 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 
@@ -14,19 +14,37 @@ import java.io.Serializable;
                 query = "SELECT s FROM Student s ORDER BY s.name"
         )
 })
+@Table(name = "students",
+    uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+
 public class Student implements Serializable {
     @Id
+    @NotBlank
     private String username;
-    private String password, name, email;
+
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String name;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @ManyToOne
+    @NotNull
+    private Course course;
 
     public Student() {
     }
 
-    public Student(String username, String password, String name, String email) {
+    public Student(String username, String password, String name, String email, Course course) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.course = course;
     }
 
     public String getUsername() {
@@ -59,5 +77,13 @@ public class Student implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

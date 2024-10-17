@@ -8,16 +8,35 @@ import java.util.stream.Collectors;
 
 public class StudentDTO implements Serializable {
     private String username;
-    private String password, name, email;
+    private String password, name, email, courseName;
+    private long courseCode;
 
     public StudentDTO() {
     }
 
-    public StudentDTO(String username, String password, String name, String email) {
+    public StudentDTO(String username, String password, String name, String email, String courseName, long courseCode) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.courseName = courseName;
+        this.courseCode = courseCode;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public long getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(long courseCode) {
+        this.courseCode = courseCode;
     }
 
     public String getUsername() {
@@ -52,7 +71,7 @@ public class StudentDTO implements Serializable {
         this.email = email;
     }
     public static StudentDTO from(Student student) {
-        return new StudentDTO(student.getUsername(), student.getPassword(), student.getName(), student.getEmail());
+        return new StudentDTO(student.getUsername(), student.getPassword(), student.getName(), student.getEmail(), student.getCourse().getName(), student.getCourse().getCode());
     }
 
     public static List<StudentDTO> from(List<Student> students) {
