@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NamedQueries({
@@ -36,6 +38,9 @@ public class Student implements Serializable {
     @NotNull
     private Course course;
 
+    @ManyToMany(mappedBy = "students")
+    private List<Subject> subjects;
+
     public Student() {
     }
 
@@ -45,6 +50,7 @@ public class Student implements Serializable {
         this.name = name;
         this.email = email;
         this.course = course;
+        subjects = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -85,5 +91,21 @@ public class Student implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+    public void addSubject(Subject subject) {
+        subjects.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        subjects.remove(subject);
     }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
 
 import java.util.List;
 
@@ -17,11 +18,14 @@ public class StudentBean {
     @EJB
     private CourseBean cb;
 
+    @EJB
+    private SubjectBean sb;
+
     public List<Student> findAll() {
         return em.createNamedQuery("getAllStudents", Student.class).getResultList();
     }
 
-    public Student find(String username){
+    public Student find(String username) throws RuntimeException {
         Student s = em.find(Student.class, username);
         if(s == null)
             throw new RuntimeException("Student with username " + username + " not found");
@@ -34,6 +38,17 @@ public class StudentBean {
         Student s = new Student(username, password, name, email, course);
         course.addStudent(s);
         em.persist(s);
-        em.persist(course);
+    }
+
+    public void enrollStudentInSubject(String username, long subjectCode){
+        Student stu = find(username);
+        Subject sub = sb.find(subjectCode);
+        if(sub.getStudents().contains(stu) || stu.getSubjects().contains(sub))
+            return;
+
+        if(sub.getCourse().equals(stu.getCourse())){
+            stu.addSubject(sub);
+            sub.addStudent(stu);
+        }
     }
 }

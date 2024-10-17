@@ -37,3 +37,6 @@ monitor: deploy logs
 
 mails:
 	docker compose exec --workdir /var/mail smtp bash
+
+all:
+    sudo make down && sudo make up && sudo make deploy

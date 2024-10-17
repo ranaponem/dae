@@ -14,13 +14,20 @@ public class ConfigBean {
     @EJB
     private CourseBean courseBean;
 
+    @EJB
+    private SubjectBean subjectBean;
+
     @PostConstruct
     public void populateDB(){
         courseBean.create(1, "EI");
         courseBean.create(2, "Jogos");
+        subjectBean.create(1, "DAE", "2024/25", 3, 1);
+        subjectBean.create(2, "DAD", "2024/25", 3, 1);
         studentBean.create("marau", "123", "Rafael", "123@gmail.com",1);
         studentBean.create("zexxx", "123", "Jose", "456@gmail.com",2);
         studentBean.create("lol", "123", "Manel", "123@hotmail.com",1);
         studentBean.create("archwiki", "123", "Arch", "456@hotmail.com",2);
+        studentBean.enrollStudentInSubject("marau", 1);
+        studentBean.enrollStudentInSubject("marau", 2);
     }
 }
