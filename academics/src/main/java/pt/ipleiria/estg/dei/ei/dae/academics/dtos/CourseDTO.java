@@ -5,11 +5,12 @@ import jakarta.persistence.OneToMany;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CourseDTO {
+public class CourseDTO implements Serializable {
     private long code;
     private String name;
 

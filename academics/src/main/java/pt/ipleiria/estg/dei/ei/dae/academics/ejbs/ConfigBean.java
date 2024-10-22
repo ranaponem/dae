@@ -17,6 +17,12 @@ public class ConfigBean {
     @EJB
     private SubjectBean subjectBean;
 
+    @EJB
+    private TeacherBean teacherBean;
+
+    @EJB
+    private AdministratorBean administratorBean;
+
     @PostConstruct
     public void populateDB(){
         courseBean.create(1, "EI");
@@ -29,5 +35,7 @@ public class ConfigBean {
         studentBean.create("archwiki", "123", "Arch", "456@hotmail.com",2);
         studentBean.enrollStudentInSubject("marau", 1);
         studentBean.enrollStudentInSubject("marau", 2);
+        teacherBean.create("patriciomoment", "123", "Patricio", "pat@ricio.pt", "GA1.16");
+        administratorBean.create("admin", "admin", "Gilberto o destroidor", "gilberto@hotmail.com");
     }
 }

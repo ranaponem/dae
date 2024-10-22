@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
         uniqueConstraints = {
             @UniqueConstraint(columnNames = {"name", "course_code", "school_year"})
         })
-public class Subject {
+public class Subject implements Serializable {
     @Id
     @NotNull
     private long code;
@@ -47,6 +48,20 @@ public class Subject {
     )
     private List<Student> students;
 
+    @ManyToMany
+    @JoinTable(
+            name = "subject_teacher",
+            joinColumns = @JoinColumn(
+                    name = "subject_code",
+                    referencedColumnName = "code"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "teacher_username",
+                    referencedColumnName = "username"
+            )
+    )
+    private List<Teacher> teachers;
+
     public Subject() {
     }
 
@@ -57,6 +72,15 @@ public class Subject {
         this.courseYear = courseYear;
         this.course = course;
         students = new ArrayList<>();
+        teachers = new ArrayList<>();
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
     }
 
     public long getCode() {

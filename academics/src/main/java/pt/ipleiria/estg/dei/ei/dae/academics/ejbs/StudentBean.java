@@ -4,6 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Subject;
@@ -50,5 +51,11 @@ public class StudentBean {
             stu.addSubject(sub);
             sub.addStudent(stu);
         }
+    }
+
+    public Student findWithSubjects(String username){
+        var student = this.find(username);
+        Hibernate.initialize(student.getSubjects());
+        return student;
     }
 }
