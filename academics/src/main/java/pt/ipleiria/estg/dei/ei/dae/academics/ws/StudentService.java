@@ -8,6 +8,8 @@ import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.StudentBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -27,19 +29,25 @@ public class StudentService {
     @POST
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createStudent(StudentDTO DTO) {
-        studentBean.create(DTO.getUsername(), DTO.getPassword(), DTO.getName(), DTO.getEmail(), DTO.getCourseCode());
-
-        Student newStudent = studentBean.find(DTO.getUsername());
-
-        return Response.status(Response.Status.CREATED).entity(StudentDTO.from(newStudent)).build();
+    public Response create(StudentDTO studentDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+        studentBean.create(
+                studentDTO.getUsername(),
+                studentDTO.getPassword(),
+                studentDTO.getName(),
+                studentDTO.getEmail(),
+                studentDTO.getCourseCode()
+        );
+        Student student = studentBean.find(studentDTO.getUsername());
+        return Response.status(Response.Status.CREATED).entity(StudentDTO.from
+                (student)).build();
     }
-
     @GET
     @Path("{username}")
     public Response getStudent(@PathParam("username") String username) {
-        var student = studentBean.find(username);
-        return Response.ok(StudentDTO.from(student)).build();
+        var student = studentBean.findWithSubjects(username);
+        var studentDTO = StudentDTO.from(student);
+        studentDTO.setSubjects(SubjectDTO.from(student.getSubjects()));
+        return Response.ok(studentDTO).build();
     }
 
     @GET

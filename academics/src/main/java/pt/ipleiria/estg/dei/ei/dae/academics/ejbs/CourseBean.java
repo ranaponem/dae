@@ -20,11 +20,7 @@ public class CourseBean {
     }
 
     public Course find(long code){
-        Course c = em.find(Course.class, code);
-        if(c == null)
-            throw new RuntimeException("Course with code " + code + " not found");
-
-        return c;
+        return em.find(Course.class, code);
     }
 
     public void create(long code, String name) {
