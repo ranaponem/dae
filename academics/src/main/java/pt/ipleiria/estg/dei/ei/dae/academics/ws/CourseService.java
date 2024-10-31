@@ -9,6 +9,8 @@ import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.CourseBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Course;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class CourseService {
     @POST
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createCourse(CourseDTO DTO){
+    public Response createCourse(CourseDTO DTO) throws MyEntityExistsException, MyConstraintViolationException {
         courseBean.create(DTO.getCode(), DTO.getName());
 
         Course newCourse = courseBean.find(DTO.getCode());

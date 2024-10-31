@@ -16,7 +16,7 @@ import java.util.Objects;
         )
 })
 @Table(name = "courses")
-public class Course {
+public class Course extends Versionable{
     @Id
     @NotNull
     private long code;

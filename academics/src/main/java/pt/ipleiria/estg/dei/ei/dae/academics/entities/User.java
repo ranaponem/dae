@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User {
+public class User extends Versionable {
     @Id
     @NotBlank
     private String username;

@@ -19,7 +19,7 @@ import java.util.List;
         uniqueConstraints = {
             @UniqueConstraint(columnNames = {"name", "course_code", "school_year"})
         })
-public class Subject implements Serializable {
+public class Subject extends Versionable implements Serializable {
     @Id
     @NotNull
     private long code;

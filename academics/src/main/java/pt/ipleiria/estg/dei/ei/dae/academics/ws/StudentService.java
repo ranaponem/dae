@@ -8,6 +8,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.dtos.StudentDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.StudentBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Student;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
@@ -29,7 +30,7 @@ public class StudentService {
     @POST
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(StudentDTO studentDTO) throws MyEntityExistsException, MyEntityNotFoundException {
+    public Response create(StudentDTO studentDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         studentBean.create(
                 studentDTO.getUsername(),
                 studentDTO.getPassword(),
@@ -55,5 +56,19 @@ public class StudentService {
     public Response getStudentSubjects(@PathParam("username") String username) {
         var student = studentBean.findWithSubjects(username);
         return Response.ok(SubjectDTO.from(student.getSubjects())).build();
+    }
+
+    @PUT
+    @Path("{username}")
+    public Response update(@PathParam("username") String username, StudentDTO studentDTO) {
+        var student = studentBean.find(username);
+        studentBean.update(
+                studentDTO.getUsername(),
+                studentDTO.getPassword(),
+                studentDTO.getName(),
+                studentDTO.getEmail(),
+                studentDTO.getCourseCode()
+        );
+        return Response.ok(student).build();
     }
 }
